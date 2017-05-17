@@ -21,7 +21,10 @@ var tinypng = require('gulp-tinypng');
 
 gulp.task('tinypng', function () {
 	gulp.src('src/**/*.png')
-		.pipe(tinypng('API_KEY'))
+		.pipe(tinypng({
+					apiKey: ['API_KEY'],
+					cached: true
+		}))
 		.pipe(gulp.dest('compressed_images'));
 });
 ```
