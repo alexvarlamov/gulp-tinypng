@@ -77,11 +77,7 @@ function gulpPrefixer(options) {
 	}
 	apiKey = new Buffer(apiKey); // allocate ahead of time
 
-	if (!cached) {
-		cleanTemp();
-	} else {
-		createTempDir();
-	}
+	createTempDir();
 	// Creating a stream through which each file will pass
 	var stream = through.obj(function(file, enc, callback) {
 		if (file.isNull()) {
