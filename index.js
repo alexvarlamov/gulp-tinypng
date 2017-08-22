@@ -178,7 +178,6 @@ var tinyNewPng = function(keys, file, cb) {
 function tinypng(keys, file, cb) {
 	var tmpFileName = md5(file.contents);
 	readTemp(tmpFileName, function(err, tmpFile) {
-		console.log(err, tmpFile)
 		if (err) {
 			tinyNewPng(keys, file, function(data) {
 				cb(data);
