@@ -18,15 +18,17 @@ var gulp = require('gulp');
 var tinypng = require('gulp-tiny');
 
 gulp.task('tinypng', function () {
-	gulp.src('src/**/*.png')
+	const exit_path = resolve('compressed_images');
+	return gulp.src('original_images/**/*.{png,jpg,jpeg}')
 		.pipe(tinypng({
-			apiKey: ['API_KEY'],
+			apiKeys: ['API_KEY'],
 			cached: true,
 			size: [
-				{ name: "hd", "method": "fit", "width": 1280, "height": 720 }
-			]
+				{ name: "hd", method: "fit", width: 480, height: 320 }
+			],
+			exit_path
 		}))
-		.pipe(gulp.dest('compressed_images'));
+		.pipe(gulp.dest(exit_path));
 });
 ```
 
