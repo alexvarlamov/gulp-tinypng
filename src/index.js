@@ -257,7 +257,7 @@ export const gulpTiny = (options = {}) => {
 					}
 				});
 
-				log('gulp-tinypng: ', colors.green('✔ ') + file.relative + ' (saved ' + prettyBytes(prevLength - file.contents.length) + ' - ' + ((1 - file.contents.length / prevLength) * 100).toFixed(0) + '%)  --- KEY USED: ' +(CURRENT_COUNT == null ? "From cache" : CURRENT_COUNT + '/' + MAX_COUNT));
+				log('gulp-tinypng: ', colors.green('✔ ') + file.relative + ' (saved ' + prettyBytes(prevLength - file.contents.length) + ' - ' + ((1 - file.contents.length / prevLength) * 100).toFixed(0) + '%)  --- KEY USED: ' +(CURRENT_COUNT == null ? "From cache" : CURRENT_COUNT + '/' + MAX_COUNT + " (" + apiKeys[CURRENT_KEY] + ")"));
 
 				return callback();
 			});
