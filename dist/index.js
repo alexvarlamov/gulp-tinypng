@@ -383,7 +383,7 @@ var gulpTiny = exports.gulpTiny = function gulpTiny() {
 					}
 				});
 
-				(0, _gulpUtil.log)('gulp-tinypng: ', _gulpUtil.colors.green('✔ ') + file.relative + ' (saved ' + (0, _prettyBytes2.default)(prevLength - file.contents.length) + ' - ' + ((1 - file.contents.length / prevLength) * 100).toFixed(0) + '%)  --- KEY USED: ' + (CURRENT_COUNT == null ? "From cache" : CURRENT_COUNT + '/' + MAX_COUNT));
+				(0, _gulpUtil.log)('gulp-tinypng: ', _gulpUtil.colors.green('✔ ') + file.relative + ' (saved ' + (0, _prettyBytes2.default)(prevLength - file.contents.length) + ' - ' + ((1 - file.contents.length / prevLength) * 100).toFixed(0) + '%)  --- KEY USED: ' + (CURRENT_COUNT == null ? "From cache" : CURRENT_COUNT + '/' + MAX_COUNT + " (" + apiKeys[CURRENT_KEY] + ")"));
 
 				return callback();
 			});
