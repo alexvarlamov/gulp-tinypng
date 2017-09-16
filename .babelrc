@@ -1,0 +1,5 @@
+{
+  "presets": ["node6", "nodejs", "es2015", "stage-0"],
+  "plugins": ["transform-undefined-to-void", "transform-runtime", "transform-remove-debugger", "transform-property-literals", "transform-minify-booleans", "transform-merge-sibling-variables", "minify-type-constructors", "minify-numeric-literals", "minify-guarded-expressions", "minify-constant-folding"]
+
+}

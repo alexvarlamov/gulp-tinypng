@@ -1,38 +1,28 @@
 {
-  "name": "gulp-tinypng",
-  "version": "1.0.2",
+  "name": "gulp-tiny",
+  "version": "1.0.0",
   "description": "gulp plugin to compress png images using tinypng api",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "creativeaura/gulp-tinypng",
   "scripts": {
-    "test": "mocha"
+    "development": "gulp tinypng",
+    "compile": "babel -d dist/ src/"
   },
   "files": [
-    "index.js"
+    "dist/index.js"
   ],
   "author": {
-    "name": "Gaurav Jassal",
-    "email": "gaurav@jassal.me",
-    "url": "http://gaurav.jassal.me"
+    "name": "Ihor Haiduk",
+    "email": "cookkycok@gmail.com"
   },
-  "keywords": [
-    "gulpplugin",
-    "tinypng",
-    "image",
-    "img",
-    "picture",
-    "photo",
-    "minify",
-    "minifier",
-    "compress",
-    "png"
-  ],
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=6.0.0"
   },
   "license": "MIT",
   "dependencies": {
-    "event-stream": "~3.3.4",
+    "babel-core": "^6.26.0",
+    "babel-runtime": "^6.26.0",
+    "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.8",
     "md5": "^2.2.1",
@@ -41,9 +31,25 @@
     "request": "^2.81.0",
     "rmdir": "^1.2.0",
     "through2": "^2.0.3",
-    "vinyl": "^2.0.2"
+    "vinyl": "^2.1.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-minify-constant-folding": "^0.2.0",
+    "babel-plugin-minify-guarded-expressions": "^0.2.0",
+    "babel-plugin-minify-numeric-literals": "^0.2.0",
+    "babel-plugin-minify-type-constructors": "^0.2.0",
+    "babel-plugin-transform-merge-sibling-variables": "^6.8.6",
+    "babel-plugin-transform-minify-booleans": "^6.8.3",
+    "babel-plugin-transform-property-literals": "^6.8.5",
+    "babel-plugin-transform-remove-debugger": "^6.8.5",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-plugin-transform-undefined-to-void": "^6.8.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-node6": "^11.0.0",
+    "babel-preset-nodejs": "^6.0.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-watch": "^2.0.7",
     "mocha": "*"
   }
 }
