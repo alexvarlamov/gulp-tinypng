@@ -109,21 +109,31 @@ var PLUGIN_NAME = "gulp-tiny",
 									while (1) {
 										switch (_context.prev = _context.next) {
 											case 0:
+												_context.prev = 0;
+
+												if (!(err !== null)) {
+													_context.next = 3;
+													break;
+												}
+
+												throw new _gulpUtil.PluginError(PLUGIN_NAME, err);
+
+											case 3:
 												answer = JSON.parse(body), answ = resp.toJSON(), count = parseInt(answ.headers['compression-count']);
 
 												CURRENT_COUNT = count;
 
 												if (!(answer.output && answer.output.url)) {
-													_context.next = 10;
+													_context.next = 13;
 													break;
 												}
 
 												filename = (0, _md2.default)(file.contents);
-												_context.next = 6;
+												_context.next = 9;
 												return download(answer.output.url, filename);
 
-											case 6:
-												_context.next = 8;
+											case 9:
+												_context.next = 11;
 												return new _promise2.default(function (resolve) {
 													(0, _fs.readFile)((0, _path2.join)(TEMP_DIR, filename), function (err, content) {
 														if (err) throw new _gulpUtil.PluginError(PLUGIN_NAME, err);
@@ -132,7 +142,7 @@ var PLUGIN_NAME = "gulp-tiny",
 													});
 												});
 
-											case 8:
+											case 11:
 												nsize = size.map(function (_ref3) {
 													var name = _ref3.name,
 													    method = _ref3.method,
@@ -171,12 +181,21 @@ var PLUGIN_NAME = "gulp-tiny",
 													cb(data_return);
 												});
 
-											case 10:
+											case 13:
+												_context.next = 18;
+												break;
+
+											case 15:
+												_context.prev = 15;
+												_context.t0 = _context["catch"](0);
+												throw new _gulpUtil.PluginError(PLUGIN_NAME, _context.t0);
+
+											case 18:
 											case "end":
 												return _context.stop();
 										}
 									}
-								}, _callee, void 0);
+								}, _callee, void 0, [[0, 15]]);
 							}));
 
 							return function (_x3, _x4, _x5) {
@@ -228,11 +247,16 @@ var PLUGIN_NAME = "gulp-tiny",
 										Authorization: 'Basic ' + AUTH_TOKEN
 									}
 								}, function (error, response, body) {
-									var answer = response.toJSON(),
-									    count = parseInt(answer.headers['compression-count']);
+									try {
+										if (error !== null) throw new _gulpUtil.PluginError(PLUGIN_NAME, error);
+										var answer = response.toJSON(),
+										    count = parseInt(answer.headers['compression-count']);
 
-									CURRENT_COUNT = count;
-									resolve();
+										CURRENT_COUNT = count;
+										resolve();
+									} catch (err) {
+										throw new _gulpUtil.PluginError(PLUGIN_NAME, err);
+									}
 								});
 							} else {
 								resolve();

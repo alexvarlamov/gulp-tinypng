@@ -79,54 +79,59 @@ const compile = async (file, size = [], apiKey, cb) => {
 			},
 			body: file.contents
 		}, async (err, resp, body) => {
-			const answer = JSON.parse(body);
-			const answ = resp.toJSON();
-			const count = parseInt(answ.headers['compression-count']);
-			CURRENT_COUNT = count;
+			try {
+				if (err !== null) throw new PluginError(PLUGIN_NAME, err);
+				const answer = JSON.parse(body);
+				const answ = resp.toJSON();
+				const count = parseInt(answ.headers['compression-count']);
+				CURRENT_COUNT = count;
 
-			if (answer.output && answer.output.url) {
-				const filename = md5(file.contents);
-				await download(answer.output.url, filename);
-				await new Promise((resolve) => {
-					readFile(join(TEMP_DIR, filename), (err, content) => {
-						if (err) throw new PluginError(PLUGIN_NAME, err);
-						data_return.push({content});
-						resolve();
+				if (answer.output && answer.output.url) {
+					const filename = md5(file.contents);
+					await download(answer.output.url, filename);
+					await new Promise((resolve) => {
+						readFile(join(TEMP_DIR, filename), (err, content) => {
+							if (err) throw new PluginError(PLUGIN_NAME, err);
+							data_return.push({content});
+							resolve();
+						});
 					});
-				});
-				const nsize = size.map(({name, method, width, height}) => {
-					return new Promise((resolve) => {
-						request({
-							url: answer.output.url,
-							method: 'GET',
-							strictSSL: false,
-							headers: {
-								'Accept': '*/*',
-								'Cache-Control': 'no-cache',
-								'Content-Type': 'application/json',
-								'Authorization': 'Basic ' + AUTH_TOKEN
-							},
-							json: {
-								resize: {method, width, height}
-							}
-						}, (err, resp) => {
-							if (!err) {
-								const answ = resp.toJSON();
-								const count = parseInt(answ.headers['compression-count']);
-								CURRENT_COUNT = count;
-							}
-						})
-							.pipe(createWriteStream(join(TEMP_DIR, filename + "_" + name)))
-							.on('close', () => {
-								data_return.push({filename: filename + "_" + name, folder: name});
-								resolve();
-							});
+					const nsize = size.map(({name, method, width, height}) => {
+						return new Promise((resolve) => {
+							request({
+								url: answer.output.url,
+								method: 'GET',
+								strictSSL: false,
+								headers: {
+									'Accept': '*/*',
+									'Cache-Control': 'no-cache',
+									'Content-Type': 'application/json',
+									'Authorization': 'Basic ' + AUTH_TOKEN
+								},
+								json: {
+									resize: {method, width, height}
+								}
+							}, (err, resp) => {
+								if (!err) {
+									const answ = resp.toJSON();
+									const count = parseInt(answ.headers['compression-count']);
+									CURRENT_COUNT = count;
+								}
+							})
+								.pipe(createWriteStream(join(TEMP_DIR, filename + "_" + name)))
+								.on('close', () => {
+									data_return.push({filename: filename + "_" + name, folder: name});
+									resolve();
+								});
 
-					})
-				});
-				Promise.all(nsize).then(() => {
-					cb(data_return);
-				});
+						})
+					});
+					Promise.all(nsize).then(() => {
+						cb(data_return);
+					});
+				}
+			} catch (err) {
+				throw new PluginError(PLUGIN_NAME, err);
 			}
 
 		});
@@ -152,10 +157,15 @@ const compileTest = async (keys, file, size, cb) => {
 						'Authorization': 'Basic ' + AUTH_TOKEN
 					}
 				}, (error, response, body) => {
-					const answer = response.toJSON();
-					const count = parseInt(answer.headers['compression-count']);
-					CURRENT_COUNT = count;
-					resolve();
+					try {
+						if (error !== null) throw new PluginError(PLUGIN_NAME, error);
+						const answer = response.toJSON();
+						const count = parseInt(answer.headers['compression-count']);
+						CURRENT_COUNT = count;
+						resolve();
+					} catch (err) {
+						throw new PluginError(PLUGIN_NAME, err);
+					}
 				});
 			} else {
 				resolve();
@@ -192,11 +202,11 @@ const tinypng = (keys, file, size = [], exit_path, cb) => {
 								if (err) {
 									console.error('Error creating temp folder', err);
 								} else {
-									writeFileSync(join(dir, _path.base), readFileSync(join(TEMP_DIR, tmpFileName+"_"+name)));
+									writeFileSync(join(dir, _path.base), readFileSync(join(TEMP_DIR, tmpFileName + "_" + name)));
 								}
 							});
 						} else {
-							writeFileSync(join(dir, _path.base), readFileSync(join(TEMP_DIR, tmpFileName+"_"+name)));
+							writeFileSync(join(dir, _path.base), readFileSync(join(TEMP_DIR, tmpFileName + "_" + name)));
 						}
 					});
 				});
@@ -257,7 +267,7 @@ export const gulpTiny = (options = {}) => {
 					}
 				});
 
-				log('gulp-tinypng: ', colors.green('✔ ') + file.relative + ' (saved ' + prettyBytes(prevLength - file.contents.length) + ' - ' + ((1 - file.contents.length / prevLength) * 100).toFixed(0) + '%)  --- KEY USED: ' +(CURRENT_COUNT == null ? "From cache" : CURRENT_COUNT + '/' + MAX_COUNT + " (" + apiKeys[CURRENT_KEY] + ")"));
+				log('gulp-tinypng: ', colors.green('✔ ') + file.relative + ' (saved ' + prettyBytes(prevLength - file.contents.length) + ' - ' + ((1 - file.contents.length / prevLength) * 100).toFixed(0) + '%)  --- KEY USED: ' + (CURRENT_COUNT == null ? "From cache" : CURRENT_COUNT + '/' + MAX_COUNT + " (" + apiKeys[CURRENT_KEY] + ")"));
 
 				return callback();
 			});
